@@ -13,9 +13,20 @@ module.exports = {
   // Get all users
   async getUsers(req, res) {
     try {
-      const users = await User.find();
+      const users = await User.find()
+      //.populate('thoughts');
+for (const user of users) {
+  const userThoughts = await Thought.find({ username: user.username });
+  const updatedUser = await User.findOneAndUpdate(
+    { _id: user._id },
+    { $addToSet: { thoughts: { $each: userThoughts } } },
+    { runValidators: true, new: true }
+  );
 
-      res.json(users);
+  
+}
+      const userObj = await User.find()
+      res.json(userObj);
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);
@@ -25,7 +36,8 @@ module.exports = {
   async getSingleUser(req, res) {
     try {
       const user = await User.findOne({ _id: req.params.userId })
-        .select('-__v');
+        .select('-__v')
+        .populate('thoughts','-__v');
 
       if (!user) {
         return res.status(404).json({ message: 'No user with that ID' })
@@ -34,6 +46,7 @@ module.exports = {
       res.json({
         user,
         friendCount: await friendCount(req.params.userId),
+        thoughts: await Thought.find( { username: req.params.userId })
       });
     } catch (err) {
       console.log(err);
