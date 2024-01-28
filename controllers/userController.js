@@ -14,19 +14,8 @@ module.exports = {
   async getUsers(req, res) {
     try {
       const users = await User.find()
-      //.populate('thoughts');
-for (const user of users) {
-  const userThoughts = await Thought.find({ username: user.username });
-  const updatedUser = await User.findOneAndUpdate(
-    { _id: user._id },
-    { $addToSet: { thoughts: { $each: userThoughts } } },
-    { runValidators: true, new: true }
-  );
 
-  
-}
-      const userObj = await User.find()
-      res.json(userObj);
+      res.json(users);
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);
@@ -62,6 +51,26 @@ for (const user of users) {
       res.status(500).json(err);
     }
   },
+
+  //update user
+  async updateUser(req, res) {
+    try {
+        const user = await User.findOneAndUpdate(
+            { _id: req.params.userId },
+            { $set: req.body },
+            { runValidators: true, new: true }
+        );
+
+        if (!user) {
+            res.status(404).json({ message: 'No user with this ID' });
+        }
+
+        res.json(user);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+},
+
 
   // Delete a user and remove them from the thought
   async deleteUser(req, res) {
