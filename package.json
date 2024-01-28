@@ -1,0 +1,19 @@
+{
+  "name": "Social-Network",
+  "version": "1.0.0",
+  "description": "A social network web application",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index",
+    "watch": "nodemon index",
+    "seed": "node utils/seed"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.0",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "mongoose": "^7.0.2",
+    "nodemon": "^2.0.15"
+  }
+}

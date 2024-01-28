@@ -65,7 +65,7 @@ module.exports = {
             });
 
             if (!thought) {
-                res.status(404).json({ 'No thought with that ID' });
+                res.status(404).json({ message: 'No thought with that ID' });
             }
 
             await User.deleteMany({ _id: { $in: thought.users } });

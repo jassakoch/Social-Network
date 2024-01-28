@@ -1,17 +1,12 @@
 const { ObjectId } = require('mongoose').Types;
 const { User, Thought } = require('../models');
 
-// Aggregate function to get the number of users overall
-const userCount = async () => {
-  const numberOfUsers = await User.aggregate()
-    .count('userCount');
-  return numberOfUsers;
-}
 
-// Function to get the reaction count for a user
-const reactionCount = async (userId) => {
+
+// Function to get the friend count for a user
+const friendCount = async (userId) => {
   const user = await User.findById(userId);
-  return user.reactions.length;
+  return user.friends.length;
 }
 
 module.exports = {
@@ -20,12 +15,7 @@ module.exports = {
     try {
       const users = await User.find();
 
-      const userObj = {
-        users,
-        userCount: await userCount(),
-      };
-
-      res.json(userObj);
+      res.json(users);
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);
@@ -43,7 +33,7 @@ module.exports = {
 
       res.json({
         user,
-        reactionCount: await reactionCount(req.params.userId),
+        friendCount: await friendCount(req.params.userId),
       });
     } catch (err) {
       console.log(err);
@@ -59,6 +49,7 @@ module.exports = {
       res.status(500).json(err);
     }
   },
+
   // Delete a user and remove them from the thought
   async deleteUser(req, res) {
     try {
@@ -87,15 +78,15 @@ module.exports = {
     }
   },
 
-  // Add a reaction to a user
-  async addReaction(req, res) {
-    console.log('You are adding a reaction');
-    console.log(req.body);
+  // Add a friend to a user
+  async addFriend(req, res) {
+    console.log('You are adding a friend');
+    console.log(req.params.friendId);
 
     try {
       const user = await User.findOneAndUpdate(
         { _id: req.params.userId },
-        { $addToSet: { reactions: req.body } },
+        { $addToSet: { friends: req.params.friendId } },
         { runValidators: true, new: true }
       );
 
@@ -110,12 +101,12 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  // Remove reaction from a user
-  async removeReaction(req, res) {
+  // Remove friend from a user
+  async removeFriend(req, res) {
     try {
       const user = await User.findOneAndUpdate(
         { _id: req.params.userId },
-        { $pull: { reaction: { reactionId: req.params.reactionId } } },
+        { $pull: { friend: { friendId: req.params.friendId } } },
         { runValidators: true, new: true }
       );
 
