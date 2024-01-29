@@ -118,24 +118,28 @@ module.exports = {
     },
 
     //Delete reaction from thought
-    async removeReaction(req, res) {
-        try {
-            const thought = await Thought.findOneAndUpdate(
-                { _id: req.params.thoughtId },
-                { $pull: { reactions: { reactionId: req.params.reactionId } } },
-                { new: true }
-            );
+    //Delete reaction from thought
+async removeReaction(req, res) {
+    try {
+        const thought = await Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },
+            { $pull: { reactions: { reactionId: req.params.reactionId } } },
+            { new: true }
+        );
 
-            if (!thought) {
-                return res
-                    .status(404)
-                    .json({ message: 'No thought found with that ID ' });
-            }
-            const updatedThought = await Thought.findOne({ _id: req.params.thoughtId });
-        } catch (err) {
-            res.status(500).json(err);
-
+        if (!thought) {
+            return res
+                .status(404)
+                .json({ message: 'No thought found with that ID ' });
         }
-    },
+
+        // Send the updated thought as the response
+        res.json(thought);
+    } catch (err) {
+        // Ensure to send a response in case of an error
+        res.status(500).json(err);
+    }
+},
+
 };
 

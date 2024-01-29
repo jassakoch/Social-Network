@@ -37,11 +37,11 @@ Use an API client like Insomnia or Postman to test the routes.
 - Create, update, and delete users and thoughts with POST, PUT, and DELETE routes.
 - Manage reactions and friends using specific POST and DELETE routes.
 
-Screenshots and additional documentation can be found in the `assets/images` directory.
+[Video Walkthrough Demo](https://app.screencastify.com/v3/watch/9klagsUYKJXQWHrUZ8Uc )
 
-For example, to add a screenshot to your README, you can use the following syntax:
+## Credits
+- I used the University of Toronto Bootcamp Ex miniproject to copy some of the code from the miniproject of module 18 NoSQL
+- My classmate Bahar Ossareh had tutored me through my userController and thoughtController routes. Her Github link is [here](https://github.com/bahossdev) 
 
-```md
-![alt text](assets/images/screenshot.png)
-
-##c
+## License
+MIT
